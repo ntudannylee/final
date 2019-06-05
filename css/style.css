@@ -1,0 +1,15 @@
+body {
+    display: flex;
+    justify-content: center;
+}
+
+.tetris {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.border {
+    width: 240px;
+    height: 400px;
+    border: 3px black solid;
+}

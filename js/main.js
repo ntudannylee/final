@@ -15,10 +15,31 @@ const player = {
     position: { x: 5, y: 5 },
     matrix: matrix,
 }
+const matrix_arena = create_arena(12, 20);
+//console.table(matrix_arena);
+
+function create_arena(width, height) { //設定場地
+    const matrix = [];
+    while (height--) {
+        matrix.push(new Array(width).fill(0));
+    }
+    return matrix;
+}
+
+function merge(matrix_arena, player) { //合併場地與puzzle
+    player.matrix.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if (value !== 0) {
+                matrix_arena[y + player.position.y][x + player.position.x] = value;
+            }
+
+        });
+    });
+}
 
 function draw() {
     // 建立線型漸層物件 參數依序為 x0(x起始點)、y0(y起始點)、x1(x結束點)、y1(y結束點)
-    var grd = ctx.createLinearGradient(0, 0, 0, 200);
+    var grd = ctx.createLinearGradient(0, 0, 0, 400);
     // 設定顏色位置 參數依序為 position(0.0 到 1.0，0 即為起始點，1 即為結束點)、顏色代碼
     grd.addColorStop(0, "#CCEEFF");
     // 設定顏色位置 參數依序為 position(0.0 到 1.0，0 即為起始點，1 即為結束點)、顏色代碼
