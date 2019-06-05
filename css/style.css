@@ -3,13 +3,13 @@ body {
     justify-content: center;
 }
 
-.tetris {
-    margin-top: auto;
-    margin-bottom: auto;
+#tetris {
+    width: 60vh;
+    height: 90vh;
 }
 
 .border {
-    width: 240px;
-    height: 400px;
+    width: 60vh;
+    height: 90vh;
     border: 3px black solid;
 }
