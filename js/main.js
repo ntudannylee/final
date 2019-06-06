@@ -101,8 +101,8 @@ function merge(matrix_arena, player) { //合併場地與puzzle
 function collide(matrix_arena, player) { //  透過player的matrix與arena的matrix來判斷同一列的行有沒有重疊到
     m = player.matrix;
     p = player.position;
-    for (let y = 0; y < m.length; ++y) {
-        for (let x = 0; x < m[y].length; ++x) {
+    for (var y = 0; y < m.length; ++y) {
+        for (var x = 0; x < m[y].length; ++x) {
             if (m[y][x] !== 0 && (matrix_arena[y + p.y] && matrix_arena[y + p.y][x + p.x]) != 0) {
                 return true;
             }
@@ -146,6 +146,9 @@ function puzzle_reset() {
     player.matrix = create_puzzle(puzzle[random]);
     player.position.y = 0;
     player.position.x = randomforx;
+    if (collide(matrix_arena, player)) {
+        matrix_arena.forEach(row => row.fill(0));
+    }
 }
 
 function tetris_drop() { //tetris 下降及碰撞判斷
@@ -166,19 +169,25 @@ document.addEventListener('keydown', event => {
             break;
         case 37:
             player.position.x--;
+            if (collide(matrix_arena, player)) {
+                player.position.x += 1;
+            }
             break;
         case 39:
             player.position.x++;
+            if (collide(matrix_arena, player)) {
+                player.position.x -= 1;
+            }
             break;
     }
 })
 
-
+//-------下降事件-------
 let dropCounter = 0;
 let dropInterval = 1000; //1000毫秒等於1秒
 
 let lastTime = 0;
-
+//能夠連續draw
 function update(time = 0) {
     // console.log(time) //觀察time
     const deltaTime = time - lastTime; //計算時間分差
