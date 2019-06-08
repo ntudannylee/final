@@ -111,7 +111,7 @@ function collide(matrix_arena, player) { //  透過player的matrix與arena的mat
     return false;
 }
 
-//繪製背景並呼叫tetris_puzzle畫出一個方塊
+//----繪製背景並呼叫tetris_puzzle畫出一個方塊----
 function draw() {
     // 建立線型漸層物件 參數依序為 x0(x起始點)、y0(y起始點)、x1(x結束點)、y1(y結束點)
     var grd = ctx.createLinearGradient(0, 0, 0, 400);
@@ -138,7 +138,9 @@ function tetris_puzzle(matrix, offset) {
         });
     });
 }
+//----繪製背景並呼叫tetris_puzzle畫出一個方塊----
 
+//隨機創造出一個puzzle，把結果放在player物件內
 function puzzle_reset() {
     const puzzle = 'TSZIJLO';
     var random = Math.floor(Math.random() * 7); //0~6  math.floor是捨五入math.random的值
@@ -146,12 +148,48 @@ function puzzle_reset() {
     player.matrix = create_puzzle(puzzle[random]);
     player.position.y = 0;
     player.position.x = randomforx;
+    //判斷puzzle有沒有堆疊到頂，若有，即為碰撞。
     if (collide(matrix_arena, player)) {
         matrix_arena.forEach(row => row.fill(0));
     }
 }
 
-function tetris_drop() { //tetris 下降及碰撞判斷
+//puzzle翻轉事件,傳入陣列以及想要旋轉的方位
+function rotate(matrix, direction) {
+    for (var y = 0; y < matrix.length; ++y) {
+        for (var x = 0; x < y; ++x) {
+            //概念：[a,b]-->[b,a]
+            [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
+        }
+    }
+    //順時鐘旋轉
+    if (direction > 0) {
+        //若旋轉的時候撞到兩側，超出背景，判斷狀況後加減x
+        while (collide(matrix_arena, player)) {
+            if (player.position.x < 1) {
+                player.position.x += 1;
+            } else {
+                player.position.x -= 1;
+            }
+        }
+
+        matrix.forEach(row => row.reverse());
+
+        //逆時鐘旋轉
+    } else {
+        while (collide(matrix_arena, player)) {
+            if (player.position.x < 1) {
+                player.position.x += 1;
+            } else {
+                player.position.x -= 1;
+            }
+        }
+        matrix.reverse();
+    }
+}
+
+//tetris 下降及碰撞判斷
+function tetris_drop() {
     player.position.y++;
     dropCounter = 0;
     if (collide(matrix_arena, player)) {
@@ -179,6 +217,12 @@ document.addEventListener('keydown', event => {
                 player.position.x -= 1;
             }
             break;
+        case 90:
+            rotate(player.matrix, 1);
+            break;
+        case 88:
+            rotate(player.matrix, 0);
+            break;
     }
 })
 
@@ -202,6 +246,10 @@ function update(time = 0) {
     draw();
     requestAnimationFrame(update); //requestAnimationFrame(callback)
 }
+//-------下降事件-------
 
-puzzle_reset();
-update();
+
+
+//主事件
+puzzle_reset(); //製造一個隨機puzzle
+update(); //繪製出該puzzle
