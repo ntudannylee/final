@@ -11,17 +11,22 @@ const color = [
     '#EEEE00', //I
     '#E93EFF', //J
     '#4400B3', //O
-    'black', //Z
+    'gray', //Z
     '#33FF33', //S
 
 ]
 
-const player = {
+const player = { //使用者當下使用的puzzle、puzzle位置、成績
     position: { x: 0, y: 0 },
     matrix: null,
+    score: 0,
+    hack: { a: 1, b: 1, c: 1, d: 1 }
 }
-const matrix_arena = create_arena(12, 20); //建立寬12高20的場地
-//console.table(matrix_arena);
+const matrix_arena = create_arena(12, 20); //建立寬12高20的場地 //console.table(matrix_arena);
+
+function score() {
+    document.getElementById('score').innerText = '＄' + player.score;
+}
 
 //創造tetrix_puzzle，且每個都要讓它有旋轉的軸心
 function create_puzzle(type) {
@@ -97,6 +102,23 @@ function merge(matrix_arena, player) { //合併場地與puzzle
         });
     });
 }
+//連成一條線後清除該線
+function sweep_line(matrix_arena, player) {
+    outer: for (var y = matrix_arena.length - 1; y > 0; --y) { //從底部開始判斷
+        for (var x = 0; x < matrix_arena[y].length; ++x) {
+            if (matrix_arena[y][x] === 0) {
+                continue outer;
+            }
+        }
+        //object.splice方法：丟掉物件中的某個元素後新增新的元素
+        //arrayObject.splice(index,howmany,item1,.....,itemX)
+        const row = matrix_arena.splice(y, 1)[0].fill(0); //splice完y的連線後，在matrix_arena[0]的地方.fill(0)
+        //unshift:向陣列的開頭新增一個或多個元素，並且return新的長度
+        matrix_arena.unshift(row);
+        y++;
+        player.score += 10;
+    }
+}
 
 function collide(matrix_arena, player) { //  透過player的matrix與arena的matrix來判斷同一列的行有沒有重疊到
     m = player.matrix;
@@ -151,6 +173,9 @@ function puzzle_reset() {
     //判斷puzzle有沒有堆疊到頂，若有，即為碰撞。
     if (collide(matrix_arena, player)) {
         matrix_arena.forEach(row => row.fill(0));
+        player.score = 0;
+        score();
+        alert('你輸了！');
     }
 }
 
@@ -196,11 +221,18 @@ function tetris_drop() {
         player.position.y--;
         merge(matrix_arena, player);
         puzzle_reset();
+        sweep_line(matrix_arena, player);
+        score()
+    }
+    if (player.hack.a === 0 && player.hack.b === 0 && player.hack.c === 0 && player.hack.d === 0) {
+        player.score += 1000;
+        score();
     }
 }
 document.addEventListener('keydown', event => {
     button = event.keyCode; //使用者輸入按鍵的key code
     console.log(button);
+
     switch (button) {
         case 40:
             tetris_drop();
@@ -223,8 +255,21 @@ document.addEventListener('keydown', event => {
         case 88:
             rotate(player.matrix, 0);
             break;
+        case 68:
+            player.hack.a = 0;
+            break;
+        case 65:
+            player.hack.b = 0;
+            break;
+        case 78:
+            player.hack.c = 0;
+            break;
+        case 89:
+            player.hack.d = 0;
+            break;
     }
 })
+
 
 //-------下降事件-------
 let dropCounter = 0;
@@ -253,3 +298,4 @@ function update(time = 0) {
 //主事件
 puzzle_reset(); //製造一個隨機puzzle
 update(); //繪製出該puzzle
+score();
