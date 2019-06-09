@@ -1,4 +1,6 @@
 # final b04106024 圖資四李書文
+# demo
+https://ntudannylee.github.io/final/
 # What is this?
 
 這次期末專題主題為jquery以及javascript的應用，本專題包含兩個部分，俄羅斯方塊以及輪盤賭，並分別將如何使用以及用到的技術詳細打進該類別底下。
