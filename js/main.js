@@ -25,7 +25,20 @@ const player = { //使用者當下使用的puzzle、puzzle位置、成績
 const matrix_arena = create_arena(12, 20); //建立寬12高20的場地 //console.table(matrix_arena);
 
 function score() {
-    document.getElementById('score').innerText = '＄' + player.score;
+    $(document).ready(function() {
+        if (sessionStorage.getItem('coin') === null) { //沒有session，新增一個給它
+            sessionStorage.setItem('coin', player.score);
+            var score = Number(sessionStorage.getItem('coin'));
+            var row = '＄' + score;
+            $('#score').text(row);
+        } else {
+            var score = Number(sessionStorage.getItem('coin'));
+            var row = '＄' + score;
+            player.score = score;
+            $('#score').text(row);
+        }
+
+    });
 }
 
 //創造tetrix_puzzle，且每個都要讓它有旋轉的軸心
@@ -224,14 +237,16 @@ function tetris_drop() {
         sweep_line(matrix_arena, player);
         score()
     }
+    //hack on
     if (player.hack.a === 0 && player.hack.b === 0 && player.hack.c === 0 && player.hack.d === 0) {
+        $('body').css('background-image', 'url(https://news.bitcoin.com/wp-content/uploads/2018/07/korean-government-criticized-1520x1024.png)');
         player.score += 1000;
+        sessionStorage.setItem('coin', player.score);
         score();
     }
 }
 document.addEventListener('keydown', event => {
-    button = event.keyCode; //使用者輸入按鍵的key code
-    console.log(button);
+    button = event.keyCode; //使用者輸入按鍵的key code  //console.log(button);
 
     switch (button) {
         case 40:
@@ -293,6 +308,12 @@ function update(time = 0) {
 }
 //-------下降事件-------
 
+//點選gamble連結到轉輪畫面，將player.score的值存入sessionStorage中。
+$("#gamblepage").click(function(e) {
+    e.preventDefault();
+    location.href = 'gamble.html';
+    sessionStorage.setItem('coin', player.score);
+});
 
 
 //主事件

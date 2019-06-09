@@ -1,6 +1,17 @@
 body {
     display: flex;
     justify-content: center;
+    flex-direction: column;
+}
+
+#wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.copyright {
+    display: flex;
+    justify-content: center;
 }
 
 .container {

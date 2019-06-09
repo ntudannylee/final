@@ -10,25 +10,33 @@
 </head>
 
 <body>
+    <div id='wrapper'>
+        <div class="border">
+            <canvas id="tetris" width="240" height="400"></canvas>
+        </div>
+        <div class="container">
+            <p>操作方式</p>
+            <hr>
+            <p>↓下 ←左 →右 </p>
+            <p>Ｚ 順時針旋轉</p>
+            <p>Ｘ 逆時針旋轉</p>
+            <hr>
+            <p>目前Star幣為：</p>
+            <div id="score"></div>
 
-    <div class="border">
-        <canvas id="tetris" width="240" height="400"></canvas>
+
+        </div>
+
     </div>
-    <div class="container">
-        <p>操作方式</p>
-        <hr>
-        <p>↓下 ←左 →右 </p>
-        <p>Ｚ 順時針旋轉</p>
-        <p>Ｘ 逆時針旋轉</p>
-        <hr>
-        <p>目前Star幣為：</p>
-        <div id="score"></div>
-
-    </div>
-
+    <footer class="copyright">
+        <p>© All rights belong to Danny. 2019</p>
+        <button id='gamblepage' style="border: none; margin-left: 200px;color: blueviolet;">Want to Gamble?</button>
+    </footer>
 
 
 </body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script src="js/main.js"></script>
 
 </html>
