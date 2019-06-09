@@ -130,6 +130,7 @@ function sweep_line(matrix_arena, player) {
         matrix_arena.unshift(row);
         y++;
         player.score += 10;
+        sessionStorage.setItem('coin', player.score);
     }
 }
 
