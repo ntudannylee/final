@@ -240,7 +240,7 @@ function tetris_drop() {
     }
     //hack on
     if (player.hack.a === 0 && player.hack.b === 0 && player.hack.c === 0 && player.hack.d === 0) {
-        $('body').css('background-image', 'url(https://news.bitcoin.com/wp-content/uploads/2018/07/korean-government-criticized-1520x1024.png)');
+        $('body').css('background-image', 'url(https://media.giphy.com/media/9WC8WTZsFxkRi/giphy.gif');
         player.score += 1000;
         sessionStorage.setItem('coin', player.score);
         score();
